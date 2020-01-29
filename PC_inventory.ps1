@@ -1,4 +1,9 @@
+# This script creates an inventory of PCs on your network
+
+# Get list of PCs to inventory from text file
 $computer = Get-Content c:\powershell\computers.txt
+
+# Get inventory info: OS info, Processor, Device serial number, HD, RAM, IP Address
 $Output = Foreach($C in $computer){
     $System = Get-WmiObject Win32_ComputerSystem -ComputerName $C -ErrorAction SilentlyContinue | Select-Object -Property Name,Model
     $BIOS = Get-WmiObject Win32_BIOS -ComputerName $C -ErrorAction SilentlyContinue | Select-Object -Property SerialNumber
@@ -29,4 +34,5 @@ $Output = Foreach($C in $computer){
 }
 $Output
 
+# Outputs formatted file as a csv
 $Output |Export-Csv -Path c:\powershell\Result.csv -NoTypeInformation
